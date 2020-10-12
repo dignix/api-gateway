@@ -24,19 +24,13 @@ func serveReverseProxy(target string, w http.ResponseWriter, r *http.Request) {
 }
 
 func generateProxyURL(service string, r *http.Request) string {
-	var tcpSockAddr string
+	var addr string
 	switch service {
 	case "users":
-		tcpSockAddr = os.Getenv("USER_SERVICE_REVERSE_PROXY_TCP_SOCKET_ADDRESS")
-	//case "oauth":
-	//	tcpSockAddr = os.Getenv("OAUTH_SERVER_HOST")
-	//case "customers":
-	//	tcpSockAddr = os.Getenv("CUSTOMER_SERVICE_HOST")
-	//case "orders":
-	//	tcpSockAddr = os.Getenv("ORDER_SERVICE_HOST")
+		addr = os.Getenv("USER_SERVICE_GRPC_GATEWAY_ADDR")
 	}
 
-	return "http://" + tcpSockAddr + r.URL.Path
+	return "http://" + addr + r.URL.Path
 }
 
 func HandleRequestAndRedirect(w http.ResponseWriter, r *http.Request) {

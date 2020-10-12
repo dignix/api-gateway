@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	appName, hostname, lisAddr string
+	name, addr string
 )
 
 func configureEnv() {
@@ -25,21 +25,16 @@ func configureEnv() {
 		log.Fatalln(err.Error())
 	}
 
-	appName = os.Getenv("APP_NAME")
-	if appName == "" {
-		appName = "api-gateway"
+	name = os.Getenv("SERVICE_NAME")
+	if name == "" {
+		name = "API GATEWAY"
 	}
 
-	hostname = os.Getenv("HOSTNAME")
-	if hostname == "" {
-		hostname = "API GATEWAY"
-	}
-
-	lisAddr = os.Getenv("PORT")
-	if lisAddr == "" {
-		lisAddr = ":8080"
+	addr = os.Getenv("SERVICE_PORT")
+	if addr == "" {
+		addr = ":8081"
 	} else {
-		lisAddr = ":" + lisAddr
+		addr = ":" + addr
 	}
 }
 
@@ -58,14 +53,14 @@ func waitForShutdown(srv http.Server, l *log.Logger) {
 func main() {
 	configureEnv()
 
-	l := log.New(os.Stdout, strings.ToUpper(appName)+" ", log.LstdFlags)
+	l := log.New(os.Stdout, strings.ToUpper(name)+" ", log.LstdFlags)
 
 	r := mux.NewRouter()
 
 	routes.MapURLPathsToHandlers(r, l)
 
 	srv := http.Server{
-		Addr:         lisAddr,
+		Addr:         addr,
 		Handler:      r,
 		ErrorLog:     l,
 		ReadTimeout:  10 * time.Second,
@@ -78,7 +73,7 @@ func main() {
 			l.Fatalln(err)
 		}
 	}()
-	l.Printf("%s is running on %s\n", appName, lisAddr)
+	l.Printf("%s is running on %s\n", name, addr)
 
 	waitForShutdown(srv, l)
 }

@@ -31,7 +31,7 @@ docker-build:
 
 .PHONY: docker-run
 docker-run:
-	docker run -d -p 8080:8080 --name iam-solutions-api-gateway-container hzhyvinskyi/iam-solutions-api-gateway:1.0.0
+	docker run -d -p 8081:8081 --name iam-solutions-api-gateway-container hzhyvinskyi/iam-solutions-api-gateway:1.0.0
 
 .PHONY: docker-push
 docker-push:
